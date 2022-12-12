@@ -1,5 +1,5 @@
 import './Mystyle.scss';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 const input = () => {
   type Movies = {
     id: number;
@@ -9,20 +9,48 @@ const input = () => {
     release_date: number;
     genres: string;
   };
-  const ref = useRef(null);
+  const handleSubmit = (e: any) => e.preventDefault();
+
+  // const [state, setState] = useState<Movies[]>({
+  //   filtered: [],
+  //   filteredWish: [],
+  //   original: [],
+  //   wish: []
+  // })
+  const [original, setOriginal] = useState<Movies[]>([]);
+  const [wish, setWish] = useState<Movies[]>([]);
   const [filtered, setFiltered] = useState<Movies[]>([]);
-  const [filteredwish, setFilteredwish] = useState<Movies[]>([]);
+  const [filteredWish, setFilteredWish] = useState<Movies[]>([]);
   const Switch = (movies: Movies) => {
-    filteredwish.push(movies);
-    setFilteredwish(filteredwish);
-    const res = filtered.filter((obj) => obj.id !== movies.id);
+    wish.push(movies);
+    setWish(wish);
+    setFilteredWish(wish);
+    const res = original.filter((obj) => obj.id !== movies.id);
+    setOriginal(res);
     setFiltered(res);
   };
   const Back = (movies: Movies) => {
-    filtered.push(movies);
-    setFiltered(filtered);
-    const res = filteredwish.filter((obj) => obj.id !== movies.id);
-    setFilteredwish(res);
+    original.push(movies);
+    setOriginal(original);
+    const res = wish.filter((obj) => obj.id !== movies.id);
+    setWish(res);
+    setFilteredWish(res);
+  };
+  const onInputChange = (e: any) => {
+    const filteredValues = original.filter((item) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const v = item.title.toLowerCase();
+      if (!searchTerm) return true;
+      return v.includes(searchTerm);
+    });
+    setFiltered(filteredValues);
+    const filteredValues2 = wish.filter((item) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const v = item.title.toLowerCase();
+      if (!searchTerm) return true;
+      return v.includes(searchTerm);
+    });
+    setFilteredWish(filteredValues2);
   };
 
   useEffect(() => {
@@ -34,13 +62,13 @@ const input = () => {
       console.log(jsonData);
 
       setFiltered(jsonData.data);
-      // setFilteredwish(jsonData.data);
+      setOriginal(jsonData.data);
+
       if (!data.ok) {
         const msg = `res:${data.status}`;
         throw new Error(msg);
       } else {
         console.log('ok');
-        console.log(filtered.length);
       }
     };
     api();
@@ -48,11 +76,11 @@ const input = () => {
 
   return (
     <div>
-      <div className="input-container">
-        <input type={'text'} placeholder={'Enter'} />
+      <div className="input-container" onChange={handleSubmit}>
+        <input type={'text'} placeholder={'Enter'} onChange={onInputChange} />
       </div>
 
-      <div className="Mainlist" ref={ref}>
+      <div className="Mainlist">
         <div className="listVideo">
           {filtered &&
             filtered.map((opt) => (
@@ -71,8 +99,8 @@ const input = () => {
             ))}
         </div>
         <div className="listVideo">
-          {filteredwish &&
-            filteredwish.map((opt) => (
+          {filteredWish &&
+            filteredWish.map((opt) => (
               <div className="item" key={opt.id}>
                 <p>{opt.id}</p>
                 <p>{opt.title}</p>
