@@ -1,7 +1,6 @@
 import './Mystyle.scss';
 import { useRef, useState, useEffect } from 'react';
 const input = () => {
-  const ref = useRef(null);
   type Movies = {
     id: number;
     title: string;
@@ -10,16 +9,32 @@ const input = () => {
     release_date: number;
     genres: string;
   };
+  const ref = useRef(null);
   const [filtered, setFiltered] = useState<Movies[]>([]);
+  const [filteredwish, setFilteredwish] = useState<Movies[]>([]);
+  const Switch = (movies: Movies) => {
+    filteredwish.push(movies);
+    setFilteredwish(filteredwish);
+    const res = filtered.filter((obj) => obj.id !== movies.id);
+    setFiltered(res);
+  };
+  const Back = (movies: Movies) => {
+    filtered.push(movies);
+    setFiltered(filtered);
+    const res = filteredwish.filter((obj) => obj.id !== movies.id);
+    setFilteredwish(res);
+  };
+
   useEffect(() => {
     const api = async () => {
       const data = await fetch('https://mocki.io/v1/907dd10c-32f7-48a2-a56f-89c66acb723d', {
-        method: 'GET',
-
-        headers: { 'Content-Type': 'application/json' }
+        method: 'GET'
       });
       const jsonData = await data.json();
-      setFiltered(jsonData.results);
+      console.log(jsonData);
+
+      setFiltered(jsonData.data);
+      // setFilteredwish(jsonData.data);
       if (!data.ok) {
         const msg = `res:${data.status}`;
         throw new Error(msg);
@@ -31,37 +46,12 @@ const input = () => {
     api();
   }, []);
 
-  // useEffect(() => {
-  //
-  //   fetch('https://mocki.io/v1/907dd10c-32f7-48a2-a56f-89c66acb723d')
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       setFiltered(result.results);
-  //       if (!result.ok) {
-  //         const msg = `res:${result.status}`;
-  //         throw new Error(msg);
-  //       } else {
-  //         console.log('ok');
-  //         console.log(filtered.length);
-  //       }
-  //     });
-  // }, []);
-  // const onInputChange = (e) => {
-  //   setInputValue(e.target.value)
-  //
-  //   const filteredValues = filtered.filter((item) => {
-  //     const searchTerm = e.target.value.toLowerCase()
-  //     const v = item.value.toLowerCase()
-  //     if (!searchTerm) return true
-  //     return v.includes(searchTerm)
-  //   })
-  //   setFiltered( filteredValues )
-  // }
   return (
     <div>
       <div className="input-container">
         <input type={'text'} placeholder={'Enter'} />
       </div>
+
       <div className="Mainlist" ref={ref}>
         <div className="listVideo">
           {filtered &&
@@ -69,36 +59,33 @@ const input = () => {
               <div className="item" key={opt.id}>
                 <p>{opt.id}</p>
                 <p>{opt.title}</p>
-                <img src={opt.poster} alt="" />
+                <img src={opt.poster} alt="" className="image" />
                 <p>{opt.overview}</p>
                 <p>{opt.release_date}</p>
                 <p>{opt.genres}</p>
 
-                <button type={'submit'}>go to wishlist</button>
+                <button type={'submit'} onClick={() => Switch(opt)}>
+                  go to wishlist
+                </button>
               </div>
             ))}
         </div>
         <div className="listVideo">
-          <div className="item">
-            <p>Id:</p>
-            <p>Title:</p>
-            <p>poster:</p>
-            <p>overview:</p>
-            <p>release_date:</p>
-            <p>genres:</p>
+          {filteredwish &&
+            filteredwish.map((opt) => (
+              <div className="item" key={opt.id}>
+                <p>{opt.id}</p>
+                <p>{opt.title}</p>
+                <img src={opt.poster} alt="" className="image" />
+                <p>{opt.overview}</p>
+                <p>{opt.release_date}</p>
+                <p>{opt.genres}</p>
 
-            <button type={'submit'}>go</button>
-          </div>
-          <div className="item">
-            <p>Id:</p>
-            <p>Title:</p>
-            <p>poster:</p>
-            <p>overview:</p>
-            <p>release_date:</p>
-            <p>genres:</p>
-
-            <button type={'submit'}>go</button>
-          </div>
+                <button type={'submit'} onClick={() => Back(opt)}>
+                  Back
+                </button>
+              </div>
+            ))}
         </div>
       </div>
     </div>

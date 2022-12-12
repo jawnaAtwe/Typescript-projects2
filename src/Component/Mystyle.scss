@@ -36,18 +36,20 @@ button {
 
 }
 .item {
-  padding-top: 5px;
-  height: 220px;
-  width: 300px;
+
+  height: auto;
+  width: 500px;
   background: $background-color_1;
   border-radius: 20px;
   margin-top: 10px;
-  display: flex;
-  flex-direction:column;
-  padding-left: 20px;
+  padding-left: 15px;
+  padding-bottom: 15px;
 }
 p{
-  font-size: 8px;
+  font-size: 11px;
+}
+.image{
 
-
+  height: 80px;
+  width: 80px;
 }
