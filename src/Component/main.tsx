@@ -18,7 +18,7 @@ const main = () => {
 
   const toWish = (movies: Movies) => {
     const arr: Movies[] = [movies];
-    const arr1: Movies[] = [...arr, ...wish];
+    const arr1: Movies[] = [...wish, ...arr];
     setWish(arr1);
     const res = original.filter((obj) => obj.id !== movies.id);
     setOriginal(res);
@@ -26,7 +26,7 @@ const main = () => {
 
   const toList = (movies: Movies) => {
     const arr: Movies[] = [movies];
-    const arr1: Movies[] = [...arr, ...original];
+    const arr1: Movies[] = original.concat(arr);
     setOriginal(arr1);
     const res = wish.filter((obj) => obj.id !== movies.id);
     setWish(res);
