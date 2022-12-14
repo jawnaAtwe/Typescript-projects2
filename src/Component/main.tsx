@@ -15,7 +15,7 @@ const main = () => {
   const [inputValue, setInputValue] = useState('');
   const [original, setOriginal] = useState<Movies[]>([]);
   const [wish, setWish] = useState<Movies[]>([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const [listToShow, setListToShow] = useState<Movies[]>([]);
   const [isHidden, setIsHidden] = useState<boolean>(false);
 
@@ -45,7 +45,9 @@ const main = () => {
     });
     const jsonData = await data.json();
     setOriginal(jsonData.data);
-    setPageNumber(10);
+    const arrfin = listToShow.concat(jsonData.data.slice(pageNumber * 10 - 10, pageNumber * 10));
+    setListToShow(arrfin);
+    setPageNumber(pageNumber + 1);
     if (!data.ok) {
       const msg = `res:${data.status}`;
       throw new Error(msg);
@@ -55,14 +57,11 @@ const main = () => {
   };
 
   const loadMore = () => {
-    setPageNumber(pageNumber + 10);
-  };
-
-  useEffect(() => {
-    if (pageNumber == 110) setIsHidden(true);
-    const arrfin = listToShow.concat(original.slice(pageNumber - 10, pageNumber));
+    setPageNumber(pageNumber + 1);
+    if (pageNumber == 11) setIsHidden(true);
+    const arrfin = listToShow.concat(original.slice(pageNumber * 10 - 10, pageNumber * 10));
     setListToShow(arrfin);
-  }, [pageNumber]);
+  };
 
   useEffect(() => {
     api();
