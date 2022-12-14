@@ -17,6 +17,7 @@ const main = () => {
   const [wish, setWish] = useState<Movies[]>([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [listToShow, setListToShow] = useState<Movies[]>([]);
+  const [isHidden, setIsHidden] = useState<boolean>(false);
 
   const toWish = (movies: Movies) => {
     const arr: Movies[] = [movies];
@@ -58,6 +59,7 @@ const main = () => {
   };
 
   useEffect(() => {
+    if (pageNumber == 110) setIsHidden(true);
     const arrfin = listToShow.concat(original.slice(pageNumber - 10, pageNumber));
     setListToShow(arrfin);
   }, [pageNumber]);
@@ -85,9 +87,14 @@ const main = () => {
           inputValue={inputValue}
         />
       </div>{' '}
-      <button type={'submit'} onClick={loadMore}>
-        Load More
-      </button>
+      {
+        <button
+          type={'submit'}
+          onClick={loadMore}
+          className={`loadbutton ${isHidden ? '' : 'visible'}`}>
+          Load More
+        </button>
+      }{' '}
     </div>
   );
 };
