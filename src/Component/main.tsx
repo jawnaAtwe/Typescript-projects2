@@ -2,7 +2,7 @@ import './Mystyle.scss';
 import ListComponent from './ListComponent';
 import { useState, useEffect } from 'react';
 
-interface Movies {
+export interface Movies {
   id: number;
   title: string;
   poster: string;
@@ -17,15 +17,17 @@ const main = () => {
   const [wish, setWish] = useState<Movies[]>([]);
 
   const toWish = (movies: Movies) => {
-    wish.push(movies);
-    setWish(wish);
+    const arr: Movies[] = [movies];
+    const arr1: Movies[] = [...arr, ...wish];
+    setWish(arr1);
     const res = original.filter((obj) => obj.id !== movies.id);
     setOriginal(res);
   };
 
   const toList = (movies: Movies) => {
-    original.push(movies);
-    setOriginal(original);
+    const arr: Movies[] = [movies];
+    const arr1: Movies[] = [...arr, ...original];
+    setOriginal(arr1);
     const res = wish.filter((obj) => obj.id !== movies.id);
     setWish(res);
   };
@@ -40,7 +42,6 @@ const main = () => {
         method: 'GET'
       });
       const jsonData = await data.json();
-      console.log(jsonData);
       setOriginal(jsonData.data);
       if (!data.ok) {
         const msg = `res:${data.status}`;

@@ -1,13 +1,5 @@
 import './Mystyle.scss';
-
-interface Movies {
-  id: number;
-  title: string;
-  poster: string;
-  overview: string;
-  release_date: number;
-  genres: string;
-}
+import { Movies } from './main';
 
 interface Props {
   list: Movies[];
