@@ -4,6 +4,7 @@ $background-color_2: #282c34;
 
 * {
   font-family: $font-family_1;
+  font-size: 40px;
 }
 html {
   line-height: 1.5;
@@ -22,14 +23,13 @@ body {
 justify-content: center;
 }
 .main{
-
   height: 500px;
   width: 500px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap: .5em;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 h1{
   text-align: center;

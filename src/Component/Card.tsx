@@ -3,11 +3,15 @@ import './Cards.scss';
 
 interface Props {
   item: any;
+  id: number;
+  handleClick: (id: number) => void;
 }
-const Card = ({ item }: Props) => {
+const Card = ({ item, id, handleClick }: Props) => {
+  const itemClass = item.stat ? ' active ' + item.stat : '';
+
   return (
-    <div className={'item'}>
-      <div className={'cardValue'}>{item.value}</div>
+    <div className={'item' + itemClass} onClick={() => handleClick(id)}>
+      <div className={'cardValue' + item.stat}>{item.id}</div>
     </div>
   );
 };
